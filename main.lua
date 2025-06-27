@@ -83,12 +83,12 @@ tab:Line()
 tab2 = win:Tab("Teleportation", "http://www.roblox.com/asset/?id=10789587576")
 
 tab2:Dropdown("Place to teleport to", {"Booking", "Minimum/Medium", "Maximum", "Escape", "Gate Control"}, function (SelectedLocation)
-	Location = SelectedLocation
-	print(Location)
+	getgenv().Location = SelectedLocation
+	print(getgenv().Location)
 end)
 
 tab2:Button("Teleport", "Teleport to the selected location in the dropdown", function()
-	if Location == nil then
+	if getgenv().Location == nil then
 		print("No location selected")
 	else
 		game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = LocationCFrame[Location]
