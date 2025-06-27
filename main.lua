@@ -30,18 +30,20 @@ local function refreshHighlights()
 	for _, player in Players:GetPlayers() do
 		if player ~= Players.LocalPlayer then
 			local Character = player.Character
-			if Character:FindFirstChildWhichIsA("Highlight") then
-				Character:FindFirstChildWhichIsA("Highlight"):Destroy()
-			end
 			if Character then
-				if (prisonerTeams[player.Team] and prisonerTeams[Players.LocalPlayer.Team]) or (policeTeams[player.Team] and policeTeams[Players.LocalPlayer.Team]) then
-					local Highlight = Instance.new("Highlight")
-					Highlight.FillColor = Color3.new(0, 1, 0)
-					Highlight.Parent = Character
-				else
-					local Highlight = Instance.new("Highlight")
-					Highlight.FillColor = Color3.new(1, 0, 0)
-					Highlight.Parent = Character
+				if Character:FindFirstChildWhichIsA("Highlight") then
+					Character:FindFirstChildWhichIsA("Highlight"):Destroy()
+				end
+				if Character then
+					if (prisonerTeams[player.Team] and prisonerTeams[Players.LocalPlayer.Team]) or (policeTeams[player.Team] and policeTeams[Players.LocalPlayer.Team]) then
+						local Highlight = Instance.new("Highlight")
+						Highlight.FillColor = Color3.new(0, 1, 0)
+						Highlight.Parent = Character
+					else
+						local Highlight = Instance.new("Highlight")
+						Highlight.FillColor = Color3.new(1, 0, 0)
+						Highlight.Parent = Character
+					end
 				end
 			end
 		end
