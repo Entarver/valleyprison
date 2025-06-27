@@ -1,7 +1,7 @@
-local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 
-getgenv().locationCFrame = {
+local locationCFrame = {
 	["Booking"] = CFrame.new(189, 11, -152),
 	["Minimum/Medium"] = CFrame.new(-10, 11, -76),
 	["Maximum"] = CFrame.new(87, -9, -114),
@@ -9,7 +9,7 @@ getgenv().locationCFrame = {
 	["Gate Control"] = CFrame.new(294, 7, -194)
 }
 
-getgenv().prisonerTeams = {
+local prisonerTeams = {
     [game.Teams.Booking] = true,
     [game.Teams["Minimum Security"]] = true,
     [game.Teams["Medium Security"]] = true,
@@ -17,7 +17,7 @@ getgenv().prisonerTeams = {
 	[game.Teams.Escapee] = true
 }
 
-getgenv().policeTeams = {
+local policeTeams = {
 	[game.Teams["Department of Corrections"]] = true,
 	[game.Teams["Sheriff's Office"]] = true,
 	[game.Teams["State Police"]] = true,
@@ -32,8 +32,8 @@ local function refreshHighlights()
 			if Character then
 				if Character:FindFirstChildWhichIsA("Highlight") then
 					Character:FindFirstChildWhichIsA("Highlight"):Destroy()
-					if (getgenv().prisonerTeams[Player.Team] and getgenv().prisonerTeams[Players.LocalPlayer.Team]) or 
-					(getgenv().policeTeams[Player.Team] and getgenv().policeTeams[Players.LocalPlayer.Team]) then
+					if (prisonerTeams[Player.Team] and prisonerTeams[Players.LocalPlayer.Team]) or 
+					(policeTeams[Player.Team] and policeTeams[Players.LocalPlayer.Team]) then
 						local Highlight = Instance.new("Highlight")
 						Highlight.FillColor = Color3.new(0, 1, 0)
 						Highlight.Parent = Character
@@ -48,50 +48,113 @@ local function refreshHighlights()
 	end
 end
 
-local win = Flux:Window("Test", "Valley Prison", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightShift)
-local tab = win:Tab("Tab 1", "http://www.roblox.com/asset/?id=6023426915")
+local Window = Rayfield:CreateWindow({
+   Name = "Rayfield Example Window",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Rayfield Interface Suite",
+   LoadingSubtitle = "by Sirius",
+   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
-tab:Toggle("Highlight Players", "Works both on prisoner and police", false, function(bool)
-    getgenv().toggled = bool
+   ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
 
-    if getgenv().toggled then
-        task.spawn(function()
-            while getgenv().toggled do
-                refreshHighlights()
-                task.wait()
-            end
-        end)
-	else
-    end
-end)
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
 
-tab:Line()
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
 
-tab:Label("Movement")
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
 
-tab:Slider("Walkspeed", "Makes you faster", 0, 100,16,function(ws)
-    game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = ws
-end)
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
 
-tab:Slider("Jump power", "jump power", 0, 100,16,function(jp)
-    game:GetService("Players").LocalPlayer.Character.Humanoid.JumpPower = jp
-end)
+local Tab = Window:CreateTab("Tab Example", 4483362458) -- Title, Image
 
-tab:Line()
+local espToggle = Tab:CreateToggle({
+	Name = "wall hack",
+	CurrentValue = false,
+	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+		local toggled = bool
 
-tab2 = win:Tab("Teleportation", "http://www.roblox.com/asset/?id=10789587576")
+		if toggled then
+			task.spawn(function()
+				while toggled do
+					refreshHighlights()
+					task.wait()
+				end
+			end)
+		else
+		end
+	end,
+})
 
-tab2:Dropdown("Place to teleport to", {"Booking", "Minimum/Medium", "Maximum", "Escape", "Gate Control"}, function (selectedLocation)
-	getgenv().location = selectedLocation
-	print(getgenv().location)
-end)
+local movementSection = Tab:CreateSection("Movement")
 
-tab2:Button("Teleport", "Teleport to the selected location in the dropdown", function()
-	if getgenv().location == nil then
+local walkspeedSlider = Tab:CreateSlider({
+	Name = "walk fast go",
+	Range = {0, 100},
+	Increment = 1,
+	Suffix = "Bananas",
+	CurrentValue = 16,
+	Flag = "walkspeed", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(ws)
+		Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
+	end,
+})
+
+local jumpSlider = Tab:CreateSlider({
+	Name = "jump high go",
+	Range = {0, 100},
+	Increment = 1,
+	Suffix = "Bananas",
+	CurrentValue = 16,
+	Flag = "jumppower", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(jp)
+		Players.LocalPlayer.Character.Humanoid.JumpPower = jp
+	end,
+})
+
+local tpTab = Window:CreateTab("telprot", 4483362458) -- Title, Image
+
+local selectedTeleport = nil
+
+local Dropdown = tpTab:CreateDropdown({
+	Name = "select place",
+	Options = {"Booking", "Minimum/Medium", "Maximum", "Escape", "Gate Control"},
+	CurrentOption = {"Escape"},
+	MultipleOptions = false,
+	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Options)
+		selectedTeleport = Options[1]
+		print(selectedTeleport)
+	end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Teleport",
+   Callback = function()
+	if selectedTeleport == nil then
 		print("No location selected")
 	else
-		game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = locationCFrame[getgenv().location]
+		game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = locationCFrame[selectedTeleport]
 	end
-end)
-
-tab3 = win:Tab("Aimbot", "http://www.roblox.com/asset/?id=12614416526")
+   end,
+})
