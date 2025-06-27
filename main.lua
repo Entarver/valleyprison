@@ -1,6 +1,8 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Players = game:GetService("Players")
 
+getgenv().toggled = false
+
 local locationCFrame = {
 	["Booking"] = CFrame.new(189, 11, -152),
 	["Minimum/Medium"] = CFrame.new(-10, 11, -76),
@@ -28,10 +30,10 @@ local function refreshHighlights()
 	for _, player in Players:GetPlayers() do
 		if player ~= Players.LocalPlayer then
 			local Character = player.Character
+			if Character:FindFirstChildWhichIsA("Highlight") then
+				Character:FindFirstChildWhichIsA("Highlight"):Destroy()
+			end
 			if Character then
-				if Character:FindFirstChildWhichIsA("Highlight") then
-					Character:FindFirstChildWhichIsA("Highlight"):Destroy()
-				end
 				if (prisonerTeams[player.Team] and prisonerTeams[Players.LocalPlayer.Team]) or (policeTeams[player.Team] and policeTeams[Players.LocalPlayer.Team]) then
 					local Highlight = Instance.new("Highlight")
 					Highlight.FillColor = Color3.new(0, 1, 0)
@@ -91,14 +93,23 @@ local espToggle = Tab:CreateToggle({
 	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
 		getgenv().toggled = bool
+		if not bool then
+			for _, player in Players:GetPlayers() do
+				if player ~= Players.LocalPlayer then
+					local Character = player.Character
+					if Character:FindFirstChildWhichIsA("Highlight") then
+						Character:FindFirstChildWhichIsA("Highlight"):Destroy()
+					end
+				end
+			end
+		end
 	end,
 })
 
 task.spawn(function()
-	while task.wait() do
-		if toggled then
+	while task.wait(0.5) do
+		if getgenv().toggled then
 			refreshHighlights()
-			task.wait()
 		end
 	end
 end)
