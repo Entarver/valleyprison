@@ -95,9 +95,11 @@ local espToggle = Tab:CreateToggle({
 })
 
 task.spawn(function()
-	while toggled do
-		refreshHighlights()
-		task.wait()
+	while task.wait() do
+		if toggled then
+			refreshHighlights()
+			task.wait()
+		end
 	end
 end)
 
