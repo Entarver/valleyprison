@@ -106,6 +106,13 @@ local espToggle = Tab:CreateToggle({
 	end,
 })
 
+local debug = Tab:CreateButton({
+   Name = "test esp",
+   Callback = function()
+	refreshHighlights()
+   end,
+})
+
 local movementSection = Tab:CreateSection("Movement")
 
 local walkspeedSlider = Tab:CreateSlider({
