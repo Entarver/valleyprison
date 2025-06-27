@@ -25,22 +25,26 @@ local policeTeams = {
 }
 
 local function refreshHighlights()
+	print("function fired")
 	for i, Player in pairs(Players:GetPlayers()) do
 		if Player ~= Players.LocalPlayer then
 			local Character = Player.Character
-
+			print(Character)
 			if Character then
+				print("if character passed")
 				if Character:FindFirstChildWhichIsA("Highlight") then
 					Character:FindFirstChildWhichIsA("Highlight"):Destroy()
-					if (prisonerTeams[Player.Team] and prisonerTeams[Players.LocalPlayer.Team]) or 
-					(policeTeams[Player.Team] and policeTeams[Players.LocalPlayer.Team]) then
-						local Highlight = Instance.new("Highlight")
-						Highlight.FillColor = Color3.new(0, 1, 0)
-						Highlight.Parent = Character
-					else
-						local Highlight = Instance.new("Highlight")
-						Highlight.FillColor = Color3.new(1, 0, 0)
-						Highlight.Parent = Character
+				if (prisonerTeams[Player.Team] and prisonerTeams[Players.LocalPlayer.Team]) or 
+				(policeTeams[Player.Team] and policeTeams[Players.LocalPlayer.Team]) then
+					local Highlight = Instance.new("Highlight")
+					Highlight.FillColor = Color3.new(0, 1, 0)
+					Highlight.Parent = Character
+					print("ally")
+				else
+					local Highlight = Instance.new("Highlight")
+					Highlight.FillColor = Color3.new(1, 0, 0)
+					Highlight.Parent = Character
+					print("stupid idiot enemy")
 					end
 				end
 			end
