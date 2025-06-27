@@ -1,8 +1,30 @@
 local Flux = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt")()
-
 local Players = game:GetService("Players")
 
-local function RefreshHighlights()
+getgenv().locationCFrame = {
+	["Booking"] = CFrame.new(189, 11, -152),
+	["Minimum/Medium"] = CFrame.new(-10, 11, -76),
+	["Maximum"] = CFrame.new(87, -9, -114),
+	["Escape"] = CFrame.new(347, 5, -168),
+	["Gate Control"] = CFrame.new(294, 7, -194)
+}
+
+getgenv().prisonerTeams = {
+    [game.Teams.Booking] = true,
+    [game.Teams["Minimum Security"]] = true,
+    [game.Teams["Medium Security"]] = true,
+    [game.Teams["Maximum Security"]] = true,
+	[game.Teams.Escapee] = true
+}
+
+getgenv().policeTeams = {
+	[game.Teams["Department of Corrections"]] = true,
+	[game.Teams["Sheriff's Office"]] = true,
+	[game.Teams["State Police"]] = true,
+	[game.Teams["VCSO-SWAT"]] = true
+}
+
+local function refreshHighlights()
 	for i, Player in pairs(Players:GetPlayers()) do
 		if Player ~= Players.LocalPlayer then
 			local Character = Player.Character
@@ -10,8 +32,8 @@ local function RefreshHighlights()
 			if Character then
 				if Character:FindFirstChildWhichIsA("Highlight") then
 					Character:FindFirstChildWhichIsA("Highlight"):Destroy()
-					if (PrisonerTeams[Player.Team] and PrisonerTeams[Players.LocalPlayer.Team]) or 
-					(PoliceTeams[Player.Team] and PoliceTeams[Players.LocalPlayer.Team]) then
+					if (getgenv().prisonerTeams[Player.Team] and getgenv().prisonerTeams[Players.LocalPlayer.Team]) or 
+					(getgenv().policeTeams[Player.Team] and getgenv().policeTeams[Players.LocalPlayer.Team]) then
 						local Highlight = Instance.new("Highlight")
 						Highlight.FillColor = Color3.new(0, 1, 0)
 						Highlight.Parent = Character
@@ -26,39 +48,16 @@ local function RefreshHighlights()
 	end
 end
 
-LocationCFrame = {
-	["Booking"] = CFrame.new(189, 11, -152),
-	["Minimum/Medium"] = CFrame.new(-10, 11, -76),
-	["Maximum"] = CFrame.new(87, -9, -114),
-	["Escape"] = CFrame.new(347, 5, -168),
-	["Gate Control"] = CFrame.new(294, 7, -194)
-}
-
-PrisonerTeams = {
-    [game.Teams.Booking] = true,
-    [game.Teams["Minimum Security"]] = true,
-    [game.Teams["Medium Security"]] = true,
-    [game.Teams["Maximum Security"]] = true,
-	[game.Teams.Escapee] = true
-}
-
-PoliceTeams = {
-	[game.Teams["Department of Corrections"]] = true,
-	[game.Teams["Sheriff's Office"]] = true,
-	[game.Teams["State Police"]] = true,
-	[game.Teams["VCSO-SWAT"]] = true
-}
-
 local win = Flux:Window("Test", "Valley Prison", Color3.fromRGB(255, 110, 48), Enum.KeyCode.RightShift)
 local tab = win:Tab("Tab 1", "http://www.roblox.com/asset/?id=6023426915")
 
 tab:Toggle("Highlight Players", "Works both on prisoner and police", false, function(bool)
-    print(bool)
     getgenv().toggled = bool
+
     if getgenv().toggled then
         task.spawn(function()
             while getgenv().toggled do
-                RefreshHighlights()
+                refreshHighlights()
                 task.wait()
             end
         end)
@@ -82,16 +81,16 @@ tab:Line()
 
 tab2 = win:Tab("Teleportation", "http://www.roblox.com/asset/?id=10789587576")
 
-tab2:Dropdown("Place to teleport to", {"Booking", "Minimum/Medium", "Maximum", "Escape", "Gate Control"}, function (SelectedLocation)
-	getgenv().Location = SelectedLocation
-	print(getgenv().Location)
+tab2:Dropdown("Place to teleport to", {"Booking", "Minimum/Medium", "Maximum", "Escape", "Gate Control"}, function (selectedLocation)
+	getgenv().location = selectedLocation
+	print(getgenv().location)
 end)
 
 tab2:Button("Teleport", "Teleport to the selected location in the dropdown", function()
-	if getgenv().Location == nil then
+	if getgenv().location == nil then
 		print("No location selected")
 	else
-		game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = LocationCFrame[Location]
+		game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = locationCFrame[getgenv().location]
 	end
 end)
 
