@@ -90,19 +90,16 @@ local espToggle = Tab:CreateToggle({
 	CurrentValue = false,
 	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
-		local toggled = bool
-
-		if toggled then
-			task.spawn(function()
-				while toggled do
-					refreshHighlights()
-					task.wait()
-				end
-			end)
-		else
-		end
+		getgenv().toggled = bool
 	end,
 })
+
+task.spawn(function()
+	while toggled do
+		refreshHighlights()
+		task.wait()
+	end
+end)
 
 local movementSection = Tab:CreateSection("Movement")
 
