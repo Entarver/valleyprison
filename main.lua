@@ -53,11 +53,11 @@ local function refreshHighlights()
 end
 
 local Window = Rayfield:CreateWindow({
-   Name = "Rayfield Example Window",
+   Name = "Valley Prison",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Rayfield Interface Suite",
-   LoadingSubtitle = "by Sirius",
-   ShowText = "Rayfield", -- for mobile users to unhide rayfield, change if you'd like
+   LoadingTitle = "Valley Prison",
+   LoadingSubtitle = "by cat from 1975",
+   ShowText = "Valley Prison", -- for mobile users to unhide rayfield, change if you'd like
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    ToggleUIKeybind = "K", -- The keybind to toggle the UI visibility (string like "K" or Enum.KeyCode)
@@ -89,10 +89,10 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
-local Tab = Window:CreateTab("Tab Example", 4483362458) -- Title, Image
+local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
 
 local espToggle = Tab:CreateToggle({
-	Name = "wall hack",
+	Name = "ESP",
 	CurrentValue = false,
 	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -113,10 +113,9 @@ local espToggle = Tab:CreateToggle({
 local movementSection = Tab:CreateSection("Movement")
 
 local walkspeedSlider = Tab:CreateSlider({
-	Name = "walk fast go",
+	Name = "Walkspeed",
 	Range = {0, 100},
 	Increment = 1,
-	Suffix = "Bananas",
 	CurrentValue = 16,
 	Flag = "walkspeed", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(ws)
@@ -125,34 +124,33 @@ local walkspeedSlider = Tab:CreateSlider({
 })
 
 local jumpSlider = Tab:CreateSlider({
-	Name = "jump high go",
+	Name = "Jumppower",
 	Range = {0, 100},
 	Increment = 1,
-	Suffix = "Bananas",
-	CurrentValue = 16,
+	CurrentValue = 50,
 	Flag = "jumppower", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(jp)
 		Players.LocalPlayer.Character.Humanoid.JumpPower = jp
 	end,
 })
 
-local tpTab = Window:CreateTab("telprot", 4483362458) -- Title, Image
+local tpTab = Window:CreateTab("Teleport", 4483362458) -- Title, Image
 
 local selectedTeleport = nil
 
-local Dropdown = tpTab:CreateDropdown({
-	Name = "select place",
+local tpDropdown = tpTab:CreateDropdown({
+	Name = "Select location",
 	Options = {"Booking", "Minimum/Medium", "Maximum", "Escape", "Gate Control"},
 	CurrentOption = {"Escape"},
 	MultipleOptions = false,
-	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "tpDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Options)
 		selectedTeleport = Options[1]
 		print(selectedTeleport)
 	end,
 })
 
-local Button = Tab:CreateButton({
+local tpButton = tpTab:CreateButton({
    Name = "Teleport",
    Callback = function()
 	if selectedTeleport == nil then
