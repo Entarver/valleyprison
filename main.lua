@@ -129,6 +129,14 @@ local walkspeedSlider = Tab:CreateSlider({
 	end,
 })
 
+local tpButton = Tab:CreateButton({
+   Name = "Set Walkspeed to default value",
+   Callback = function()
+		local defaultWalkspeed = 16
+		Players.LocalPlayer.Character.Humanoid.WalkSpeed = defaultWalkspeed
+   end
+})
+
 local jumpSlider = Tab:CreateSlider({
 	Name = "Jumppower",
 	Range = {0, 100},
@@ -140,7 +148,15 @@ local jumpSlider = Tab:CreateSlider({
 	end,
 })
 
-local tpTab = Window:CreateTab("Teleport", 4483362458) -- Title, Image
+local tpButton = Tab:CreateButton({
+   Name = "Set Jumppower to default value",
+   Callback = function()
+		local defaultJumppower = 50
+		Players.LocalPlayer.Character.Humanoid.JumpPower = defaultJumppower
+   end
+})
+
+local tpTab = Window:CreateTab("Teleport", 10789587576) -- Title, Image
 
 local selectedTeleport = nil
 
